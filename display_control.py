@@ -1,11 +1,11 @@
 #!/usr/bin/env python
-from samplebase import SampleBase
+from displaybase import DisplayBase
 from rgbmatrix import graphics
 from datetime import datetime, timedelta
 import time
 import json
 
-config_file = '/home/pi/time_test_config.json'
+config_file = 't0.json'
 app_data = {}
 t0 = datetime.now()
 
@@ -44,7 +44,7 @@ def get_t0():
     return t0
 
 #--ledrows=16 --led-cols=32
-class GraphicsTest(SampleBase):
+class GraphicsTest(DisplayBase):
     def __init__(self, *args, **kwargs):
         super(GraphicsTest, self).__init__(*args, **kwargs)
 
@@ -52,9 +52,11 @@ class GraphicsTest(SampleBase):
         global t0
         canvas = self.matrix
         font = graphics.Font()
-        font.LoadFont("../../../fonts/5x8.bdf")
-        blue = graphics.Color(0, 0, 255)
+        font.LoadFont("fonts/5x8.bdf")
+        #blue = graphics.Color(0, 0, 255)
+        green = graphics.Color(0, 255, 0)
         red = graphics.Color(255, 0, 0)
+        white = graphics.Color(100,100,100)
 
         #set_t0()
         get_t0()
@@ -63,13 +65,29 @@ class GraphicsTest(SampleBase):
         next_time = round(time.time() + interval) + 0.1
         while True:
             t1 = datetime.now()
-            tdiff = t1 - t0
+            tdiff = t0 - t1
+            if tdiff < timedelta(0):
+                tdiff = timedelta(0)
+                timecolor = green
+            else:
+                timecolor = red
+
+
             tdiff_dhms = dt_dhms(tdiff)
-            top_msg = f'{tdiff_dhms[0]:02d}d{tdiff_dhms[1]:02d}h'
-            bot_msg = f'{tdiff_dhms[2]:02d}m{tdiff_dhms[3]:02d}s'
+            top_msg = f'{tdiff_dhms[0]:2d} {tdiff_dhms[1]:2d}'
+            bot_msg = f'{tdiff_dhms[2]:2d} {tdiff_dhms[3]:2d}'
+            day_msg = 'd'
+            hour_msg = 'h'
+            min_msg = 'm'
+            sec_msg = 's'
+
             canvas.Clear()
-            graphics.DrawText(canvas, font, 1, 7, blue, top_msg)
-            graphics.DrawText(canvas, font, 1, 14, red, bot_msg)
+            graphics.DrawText(canvas, font, 1, 7, timecolor, top_msg)
+            graphics.DrawText(canvas, font, 1, 14, timecolor, bot_msg)
+            graphics.DrawText(canvas, font, 11, 7, white, day_msg)
+            graphics.DrawText(canvas, font, 26, 7, white, hour_msg)
+            graphics.DrawText(canvas, font, 11, 14, white, min_msg)
+            graphics.DrawText(canvas, font, 26, 14, white, sec_msg)
 
             # Force time updates to happen on uniform intervals\
             sleep_time = next_time - time.time()
@@ -84,4 +102,5 @@ class GraphicsTest(SampleBase):
 if __name__ == "__main__":
     graphics_test = GraphicsTest()
     if (not graphics_test.process()):
-        graphics_test.print_help()
+        #graphics_test.print_help() print help member does not seem to exist
+        print('graphics_test.process failed!!')
