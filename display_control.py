@@ -66,7 +66,11 @@ class GraphicsTest(DisplayBase):
         while True:
             t1 = datetime.now()
             tdiff = t0 - t1
-            if tdiff < timedelta(0):
+            if tdiff < timedelta(hours=-24):
+                tdiff = timedelta(0)
+                timecolor = white
+                get_t0()
+            elif tdiff < timedelta(0):
                 tdiff = timedelta(0)
                 timecolor = green
             else:
