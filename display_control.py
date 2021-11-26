@@ -56,7 +56,9 @@ class GraphicsTest(DisplayBase):
         #blue = graphics.Color(0, 0, 255)
         green = graphics.Color(0, 255, 0)
         red = graphics.Color(255, 0, 0)
-        white = graphics.Color(100,100,100)
+        white = graphics.Color(100, 100, 100)
+        orange = graphics.Color(255, 128, 0)
+        brown = graphics.Color(102, 51, 0)
 
         #set_t0()
         get_t0()
@@ -72,9 +74,9 @@ class GraphicsTest(DisplayBase):
                 get_t0()
             elif tdiff < timedelta(0):
                 tdiff = timedelta(0)
-                timecolor = green
-            else:
                 timecolor = red
+            else:
+                timecolor = green
 
 
             tdiff_dhms = dt_dhms(tdiff)
@@ -88,10 +90,10 @@ class GraphicsTest(DisplayBase):
             canvas.Clear()
             graphics.DrawText(canvas, font, 1, 7, timecolor, top_msg)
             graphics.DrawText(canvas, font, 1, 14, timecolor, bot_msg)
-            graphics.DrawText(canvas, font, 11, 7, white, day_msg)
-            graphics.DrawText(canvas, font, 26, 7, white, hour_msg)
-            graphics.DrawText(canvas, font, 11, 14, white, min_msg)
-            graphics.DrawText(canvas, font, 26, 14, white, sec_msg)
+            graphics.DrawText(canvas, font, 11, 7, red, day_msg)
+            graphics.DrawText(canvas, font, 26, 7, red, hour_msg)
+            graphics.DrawText(canvas, font, 11, 14, red, min_msg)
+            graphics.DrawText(canvas, font, 26, 14, red, sec_msg)
 
             # Force time updates to happen on uniform intervals\
             sleep_time = next_time - time.time()
