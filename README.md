@@ -15,8 +15,13 @@ Adafruit Medium 16x32 RGB LED matrix panel - 6mm Pitch (420)
 Adafruit RGB matrix bonnett (3211)
 
 ### Files
-display_control.py - Modified example to count down to the target time read from t0.json
-displaybase.py - Base Class supplied by hzeller's library used by display_control.py
-t0.json - Contains the target time
-config.json - Unused
-launcher.sh - bash script used to launch the countdown timer when the RPI starts up
+- *display_control.py*
+  - Modified example to count down to the target time read from t0.json
+- *displaybase.py*
+  - Base Class supplied by hzeller's library used by display_control.py
+- *t0.json*
+  - Contains the target time
+- *config.json*
+  - Unused
+- *launcher.sh*
+  - Bash script used to launch the countdown timer when the RPI starts up
