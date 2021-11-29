@@ -12,9 +12,9 @@ https://github.com/hzeller/rpi-rgb-led-matrix
 This will have more info if I ever have time...
 
 ### Hardware
-RPI 3
-Adafruit Medium 16x32 RGB LED matrix panel - 6mm Pitch (420)
-Adafruit RGB matrix bonnett (3211)
+- RPI 3
+- Adafruit Medium 16x32 RGB LED matrix panel - 6mm Pitch (420)
+- Adafruit RGB matrix bonnett (3211)
 
 ### Files
 - *display_control.py*
