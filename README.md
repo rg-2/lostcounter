@@ -2,7 +2,7 @@
 
 ![timer_proj](https://user-images.githubusercontent.com/17162939/143796672-c06c5574-f96c-4ca8-962a-278ab3714267.png)
 
-Fun tool to track how long its been since we've lost something in this house... Nope, not any more.  Now it counts down to an exciting event.  Usually Camping, but it could be anything.
+This is a fun househodl project that started out as a way to keep track of how long its been since we've lost something in this house, it happened alot!  But alas, our needs have changed, it is a lost counter no more.  Now it counts down to an exciting event.  Usually Camping, but it could be anything.
 
 It's an RGB dot matrix display powered by a raspberry pi running python using hzeller's rpi-rgb-led-matrix library found here:
 
