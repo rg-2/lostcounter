@@ -4,9 +4,15 @@ from rgbmatrix import graphics
 from datetime import datetime, timedelta
 import time
 import json
+from color_converter import create_graphics_colors, load_config_from_json, get_label_color, get_time_color
+
 
 config_file = 't0.json'
 app_data = {}
+label_rgb = (255, 255, 255)
+time_rgb = (255, 255, 255)
+label_color = graphics.Color(255, 255, 255)
+default_time = graphics.Color(255, 255, 255)
 t0 = datetime.now()
 
 def dt_dhms(dt):
@@ -43,6 +49,33 @@ def get_t0():
 
     return t0
 
+def get_colors():
+
+    try:
+        label_rgb, time_rgb = create_graphics_colors(config_file)
+        
+        # Check if colors were found
+        if label_rgb is None:
+            print("Warning: Could not find or parse label_color")
+            label_rgb = (255, 255, 255)  # Default to white
+            
+        if time_rgb is None:
+            print("Warning: Could not find or parse time_color") 
+            time_rgb = (255, 255, 255)  # Default to white
+        
+        # Create colors with defaults if needed
+        label_color = graphics.Color(*label_rgb)
+        time_color = graphics.Color(*time_rgb)
+        
+    except Exception as e:
+        print(f"Error loading colors: {e}")
+        # Use default colors
+        label_color = graphics.Color(255, 255, 255)  # White
+        time_color = graphics.Color(0, 0, 0)         # Black
+        print("Using default colors")
+
+    return label_color, time_color
+
 #--ledrows=16 --led-cols=32
 class GraphicsTest(DisplayBase):
     def __init__(self, *args, **kwargs):
@@ -53,12 +86,19 @@ class GraphicsTest(DisplayBase):
         canvas = self.matrix
         font = graphics.Font()
         font.LoadFont("fonts/5x8.bdf")
-        #blue = graphics.Color(0, 0, 255)
+        blue = graphics.Color(0, 0, 255)
+        dark_green = graphics.Color(0, 100, 0)
         green = graphics.Color(0, 255, 0)
         red = graphics.Color(255, 0, 0)
-        white = graphics.Color(100, 100, 100)
+        white = graphics.Color(200, 200, 200)
         orange = graphics.Color(255, 128, 0)
         brown = graphics.Color(102, 51, 0)
+        purple = graphics.Color(75, 0, 130)
+
+        label_color, default_time = get_colors()
+
+        #label_color = purple
+        #default_time = orange
 
         #set_t0()
         get_t0()
@@ -70,13 +110,13 @@ class GraphicsTest(DisplayBase):
             tdiff = t0 - t1
             if tdiff < timedelta(hours=-24):
                 tdiff = timedelta(0)
-                timecolor = white
+                timecolor = default_time
                 get_t0()
             elif tdiff < timedelta(0):
                 tdiff = timedelta(0)
                 timecolor = red
             else:
-                timecolor = green
+                timecolor = default_time
 
 
             tdiff_dhms = dt_dhms(tdiff)
@@ -90,10 +130,10 @@ class GraphicsTest(DisplayBase):
             canvas.Clear()
             graphics.DrawText(canvas, font, 1, 7, timecolor, top_msg)
             graphics.DrawText(canvas, font, 1, 14, timecolor, bot_msg)
-            graphics.DrawText(canvas, font, 11, 7, red, day_msg)
-            graphics.DrawText(canvas, font, 26, 7, red, hour_msg)
-            graphics.DrawText(canvas, font, 11, 14, red, min_msg)
-            graphics.DrawText(canvas, font, 26, 14, red, sec_msg)
+            graphics.DrawText(canvas, font, 11, 7, label_color, day_msg)
+            graphics.DrawText(canvas, font, 26, 7, label_color, hour_msg)
+            graphics.DrawText(canvas, font, 11, 14, label_color, min_msg)
+            graphics.DrawText(canvas, font, 26, 14, label_color, sec_msg)
 
             # Force time updates to happen on uniform intervals\
             sleep_time = next_time - time.time()
