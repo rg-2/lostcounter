@@ -1,2 +1,19 @@
 .vscode/settings.json
+.vscode/
 __pycache__/displaybase.cpython-37.pyc
+._*
+
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+._.DS_Store
+
+# Other Stuff
+test.py
+ecosystem.config.js
+.DS_Store
+*.swp
