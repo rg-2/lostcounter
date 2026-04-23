@@ -1,15 +1,16 @@
 # PM2 Process Configuration
 
-This project uses [PM2](https://keymetrics.io) to manage the execution of the counter script. PM2 handles the hardware-level execution (as root), automatic restarts on failure, and "watch" mode for development.
+This project uses [PM2](https://keymetrics.io) to manage the `DisplayApp` process. It handles hardware-level execution (as root), automatic restarts, and "watch" mode.
 
-## Current Setup Details
-- **Process Name:** `DisplayApp`
-- **Script:** `display_control.py`
-- **Interpreter:** `python3`
-- **Watch Mode:** Enabled (restarts on file change)
+## Standard Setup (Recommended)
+Since an `ecosystem.config.js` exists in the repository, you can launch the entire app with a single command:
 
-## Launch Command
-To recreate the process with the correct hardware flags for the 16x32 matrix, run:
+```bash
+sudo pm2 start ecosystem.config.js
+```
+
+## Manual Setup
+If you need to run the script manually or the ecosystem file is unavailable, use the following command to ensure the correct hardware flags for the 16x32 matrix are applied:
 
 ```bash
 sudo pm2 start display_control.py \
@@ -21,22 +22,14 @@ sudo pm2 start display_control.py \
   --led-slowdown-gpio 2
 ```
 
-## Management Commands
-
-### Persistence (Start on Boot)
+## Persistence
 To ensure the counter starts automatically when the Raspberry Pi boots:
-```bash
-sudo pm2 startup
-# Follow the on-screen instructions to copy/paste the command provided
-sudo pm2 save
-```
+1. Generate startup script: `sudo pm2 startup`
+2. Run the command provided in the output.
+3. Save the current list: `sudo pm2 save`
 
-### Logs & Monitoring
-* **View live logs:** `sudo pm2 logs DisplayApp`
-* **Check status:** `sudo pm2 list`
-* **Process details:** `sudo pm2 describe 0`
-* **Monitor CPU/RAM:** `sudo pm2 monit`
+## Monitoring
+- **Logs:** `sudo pm2 logs DisplayApp`
+- **Status:** `sudo pm2 list`
+- **Dashboard:** `sudo pm2 monit`
 
-### Stopping/Restarting
-* **Restart:** `sudo pm2 restart DisplayApp`
-* **Stop:** `sudo pm2 stop DisplayApp`
