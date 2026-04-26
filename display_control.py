@@ -4,6 +4,7 @@ from rgbmatrix import graphics
 from datetime import datetime, timedelta
 import time
 import json
+import os
 from color_converter import create_graphics_colors, load_config_from_json, get_label_color, get_time_color
 
 
@@ -58,7 +59,7 @@ def get_colors():
         if label_rgb is None:
             print("Warning: Could not find or parse label_color")
             label_rgb = (255, 255, 255)  # Default to white
-            
+         
         if time_rgb is None:
             print("Warning: Could not find or parse time_color") 
             time_rgb = (255, 255, 255)  # Default to white
@@ -102,10 +103,22 @@ class GraphicsTest(DisplayBase):
 
         #set_t0()
         get_t0()
+        last_mtime = os.path.getmtime(config_file)
 
         interval = 1
         next_time = round(time.time() + interval) + 0.1
         while True:
+            # Reload t0.json if it changed
+            try:
+                current_mtime = os.path.getmtime(config_file)
+                if current_mtime != last_mtime:
+                    print(f'{config_file} changed, reloading')
+                    get_t0()
+                    label_color, default_time = get_colors()
+                    last_mtime = current_mtime
+            except OSError:
+                pass  # file might be momentarily missing during a save 
+
             t1 = datetime.now()
             tdiff = t0 - t1
             if tdiff < timedelta(hours=-24):
